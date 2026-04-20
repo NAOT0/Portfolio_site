@@ -1,10 +1,8 @@
 name: Deploy to GitHub Pages
 
 on:
-  # mainブランチにプッシュされた時に実行
   push:
     branches: [main]
-  # 手動での実行も許可
   workflow_dispatch:
 
 permissions:
@@ -19,10 +17,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install, build, and upload
-        uses: withastro/action@v2
-        # ここで自動的に npm install と npm run build が走ります
-        # package-manager: pnpm などを使っている場合は適宜変更が必要ですが、通常は自動判別されます
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24 # 最新の安定版
+          cache: "npm"
+
+      - name: Install dependencies
+        # ここに --legacy-peer-deps を追加しました！
+        run: npm install --legacy-peer-deps
+
+      - name: Build Astro
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist # Astroの出力先フォルダ
 
   deploy:
     needs: build
