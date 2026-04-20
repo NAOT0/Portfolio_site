@@ -10,7 +10,5 @@ import mdx from "@astrojs/mdx";
 export default defineConfig({
   integrations: [react(), icon(), mdx()],
   site: "https://NAOT0.github.io",
-  // リポジトリ名が「Portfolio_site」ならその名前を入れます
-  // ユーザーページ（ユーザー名.github.io自体）として出すなら不要です
   base: "/Portfolio_site",
 });
