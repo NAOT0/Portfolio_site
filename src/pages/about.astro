@@ -2,7 +2,7 @@
 // src/pages/about.astro
 import Layout from '../layouts/Layout.astro';
 import { Profile } from '../components/Profile';
-import { History } from '../components/History';
+import  History from '../components/History.astro';
 import HistoryMap from '../components/HistoryMap.tsx';
 ---
 
@@ -31,7 +31,7 @@ import HistoryMap from '../components/HistoryMap.tsx';
     </section>
 
     <section>
-
+      <h2>History</h2>
       <History client:load />
 
     </section>
@@ -63,7 +63,7 @@ import HistoryMap from '../components/HistoryMap.tsx';
     font-size: 1.8rem; 
     margin-top: 3rem; 
     margin-bottom: 1.5rem;
-    border-left: 4px solid #0070f3;
+    border-left: 4px solid #e475ba;
     padding-left: 1rem;
   }
 

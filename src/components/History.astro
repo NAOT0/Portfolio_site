@@ -1,0 +1,47 @@
+---
+// src/components/History.tsx
+import { historyData } from "../data/history";
+---
+<section class="history-section">
+  <div class="timeline">
+    {historyData.map((item) => (
+      <div class="history-item">
+        <time>{item.date}</time>
+        <div class="content">
+          <h4 class="school-name">{item.title}</h4>
+          <p class="department-name">{item.description}</p>
+          {item.note && <p class="note">{item.note}</p>}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .timeline {
+    border-left: 2px solid #ccc;
+    padding-left: 20px;
+    margin-left: 10px;
+  }
+
+  /* 修正： .timeline-item を .history-item に変更 */
+  .history-item {
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  /* 修正： 青ポチのセレクタも .history-item::before に変更 */
+  .history-item::before {
+    content: '';
+    position: absolute;
+    left: -27px; /* 線の位置に合わせて微調整してください */
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    background: #e475ba; /* あなたの選んだ青色 */
+    border-radius: 50%;
+  }
+
+  /* その他、.timeline-period や .timeline-content も 
+     HTMLのクラス名と合っているか確認してください */
+</style>
