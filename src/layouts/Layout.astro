@@ -14,8 +14,11 @@ const { title } = Astro.props;
 <html lang="ja">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 		<title>{title}</title>
 	</head>
 	<body>
@@ -26,20 +29,60 @@ const { title } = Astro.props;
 </html>
 
 <style is:global>
-	/* 全ページ共通のスタイル */
+	/* ==========================================
+	   全ページ共通 デザイントークン & ベーススタイル
+	   ========================================== */
 	:root {
+		/* カラー */
 		--accent: #0070f3;
+		--text-primary: #1e293b;
+		--text-secondary: #64748b;
+		--text-muted: #94a3b8;
+		--border: #f1f5f9;
+
+		/* タイポグラフィ スケール */
+		--fs-xs:   0.75rem;   /* 12px */
+		--fs-sm:   0.875rem;  /* 14px */
+		--fs-base: 1rem;      /* 16px */
+		--fs-lg:   1.125rem;  /* 18px */
+		--fs-xl:   1.25rem;   /* 20px */
+		--fs-2xl:  1.5rem;    /* 24px */
+		--fs-3xl:  2rem;      /* 32px */
+		--fs-4xl:  2.5rem;    /* 40px */
+		--fs-5xl:  3rem;      /* 48px */
+
+		/* フォントウェイト */
+		--fw-normal: 400;
+		--fw-medium: 500;
+		--fw-semibold: 600;
+		--fw-bold: 700;
+		--fw-extrabold: 800;
 	}
+
+	*, *::before, *::after {
+		box-sizing: border-box;
+	}
+
 	body {
 		margin: 0;
-		font-family: sans-serif;
-		color: #333;
-		line-height: 1.6;
+		/* 日本語はNoto Sans JP、英数字はInterを優先 */
+		font-family: 'Inter', 'Noto Sans JP', sans-serif;
+		color: var(--text-primary);
+		line-height: 1.7;
+		-webkit-font-smoothing: antialiased;
+		/* スマホで文字サイズが自動変更されるのを防ぐ */
+		-webkit-text-size-adjust: 100%;
+		text-size-adjust: 100%;
 	}
+
+	/* Layoutのmainはpaddingなし、各ページで管理する */
 	main {
-		max-width: 1000px;
-		margin: 0 auto;
-		padding: 2rem;
-		min-height: 80vh; /* コンテンツが少なくてもフッターを下に押し下げる */
+		min-height: 80vh;
+	}
+
+	/* 画像などがはみ出さないように */
+	img, video {
+		max-width: 100%;
+		height: auto;
 	}
 </style>

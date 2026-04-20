@@ -79,8 +79,15 @@ const categories = [...new Set(allNews.map((post) => post.data.category))];
   }
 
   .page-header { margin-bottom: 3rem; }
-  .page-title { font-size: 2.5rem; font-weight: 800; color: #1e293b; margin: 0; }
-  .page-subtitle { color: #94a3b8; margin-top: 0.5rem; }
+  .page-title {
+    font-size: var(--fs-4xl);
+    font-weight: var(--fw-extrabold);
+    color: var(--text-primary);
+    margin: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  .page-subtitle { color: var(--text-muted); margin-top: 0.5rem; font-size: var(--fs-base); }
 
   /* --- 2. フィルターボタンのデザイン (ここを修正) --- */
   .filter-bar {
@@ -97,11 +104,12 @@ const categories = [...new Set(allNews.map((post) => post.data.category))];
     border-radius: 99px;
     border: 1px solid #e2e8f0;
     background: white;
-    color: #64748b;
-    font-size: 0.85rem;
-    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
     cursor: pointer;
     transition: all 0.2s ease;
+    white-space: nowrap;
   }
 
   /* ホバーした時の色 */
@@ -112,9 +120,9 @@ const categories = [...new Set(allNews.map((post) => post.data.category))];
 
   /* 選択されている時の色 */
   .filter-btn.active {
-    background: #1e293b; /* ここを #0070f3 にすると青になります */
+    background: var(--text-primary);
     color: white;
-    border-color: #1e293b;
+    border-color: var(--text-primary);
   }
 
   /* --- 3. ニュースリストのデザイン --- */
@@ -141,15 +149,31 @@ const categories = [...new Set(allNews.map((post) => post.data.category))];
     text-transform: uppercase;
   }
 
-  .news-link { text-decoration: none; color: #1e293b; }
-  .news-link:hover h2 { color: #0070f3; }
-  h2 { font-size: 1.25rem; margin: 0 0 0.5rem 0; transition: color 0.2s; }
+  .news-link { text-decoration: none; color: var(--text-primary); }
+  .news-link:hover h2 { color: var(--accent); }
+  h2 {
+    font-size: var(--fs-xl);
+    font-weight: var(--fw-semibold);
+    margin: 0 0 0.5rem 0;
+    transition: color 0.2s;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
   
-  .description { font-size: 0.95rem; color: #64748b; line-height: 1.6; margin: 0; }
+  .description {
+    font-size: var(--fs-sm);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
 
   /* スマホ表示の調整 */
   @media (max-width: 640px) {
-    .news-item { grid-template-columns: 1fr; gap: 1rem; }
-    .meta { flex-direction: row; align-items: center; justify-content: space-between; }
+    .news-container { padding: 0 1rem; margin: 1.5rem auto; }
+    .page-title { font-size: var(--fs-3xl); }
+    .news-item { grid-template-columns: 1fr; gap: 0.75rem; padding: 1.5rem 0; }
+    .meta { flex-direction: row; align-items: center; justify-content: flex-start; gap: 0.5rem; flex-wrap: wrap; }
   }
 </style>

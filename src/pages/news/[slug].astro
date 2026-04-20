@@ -53,7 +53,7 @@ const { Content } = await render(entry);
   .news-post {
     max-width: 800px;
     margin: 0 auto;
-    padding: 2rem 0;
+    padding: 2rem 1.5rem;
   }
   .post-header {
     margin-bottom: 3rem;
@@ -65,25 +65,33 @@ const { Content } = await render(entry);
     align-items: center;
     gap: 1rem;
     margin-bottom: 1rem;
-    color: #666;
-    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-size: var(--fs-sm);
+    flex-wrap: wrap;
   }
   .category-badge {
     background: #e0f2fe;
-    color: #0070f3;
+    color: var(--accent);
     padding: 2px 8px;
     border-radius: 4px;
-    font-weight: bold;
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-xs);
   }
   h1 {
-    font-size: 2.5rem;
+    font-size: var(--fs-4xl);
+    font-weight: var(--fw-extrabold);
     margin: 0.5rem 0 1.5rem;
     line-height: 1.2;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    color: var(--text-primary);
   }
   .description {
-    font-size: 1.1rem;
-    color: #444;
+    font-size: var(--fs-lg);
+    color: var(--text-secondary);
     font-style: italic;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
   hr {
     border: 0;
@@ -94,29 +102,41 @@ const { Content } = await render(entry);
   /* 記事本文のスタイル */
   .post-content {
     line-height: 1.8;
-    font-size: 1.1rem;
+    font-size: var(--fs-base);
   }
   .post-content :global(h2) {
-    font-size: 1.8rem;
+    font-size: var(--fs-2xl);
+    font-weight: var(--fw-bold);
     margin-top: 2.5rem;
-    border-left: 4px solid #0070f3;
+    border-left: 4px solid var(--accent);
     padding-left: 1rem;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
   .post-content :global(p) {
     margin-bottom: 1.5rem;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
   .post-content :global(strong) {
-    color: #0070f3;
+    color: var(--accent);
   }
 
   .back-link {
     display: inline-block;
     margin-top: 4rem;
     text-decoration: none;
-    color: #0070f3;
-    font-weight: bold;
+    color: var(--accent);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-sm);
   }
   .back-link:hover {
     text-decoration: underline;
+  }
+
+  @media (max-width: 480px) {
+    .news-post { padding: 1.5rem 1rem; }
+    h1 { font-size: var(--fs-3xl); }
+    .post-content { font-size: var(--fs-sm); }
   }
 </style>

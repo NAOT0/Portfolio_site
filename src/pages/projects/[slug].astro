@@ -39,33 +39,81 @@ const { Content } = await render(entry);
 </Layout>
 
 <style>
-  .project-detail { max-width: 800px; margin: 0 auto; padding: 2rem 0; }
-  .detail-header { text-align: center; margin-bottom: 4rem; border-bottom: 1px solid #eee; padding-bottom: 2rem; }
-  .detail-header h1 { font-size: 2.8rem; margin: 1rem 0; }
-  
-  .links { display: flex; justify-content: center; gap: 1.5rem; margin-top: 1.5rem; }
-  .links a {
-    padding: 0.5rem 1rem;
-    border: 1px solid #0070f3;
+  .project-detail {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+  .detail-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 2rem;
+  }
+  .detail-header h1 {
+    font-size: var(--fs-4xl);
+    font-weight: var(--fw-extrabold);
+    color: var(--text-primary);
+    margin: 1rem 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    line-height: 1.2;
+  }
+  .category {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    color: var(--accent);
+    background: #eff6ff;
+    display: inline-block;
+    padding: 3px 10px;
     border-radius: 6px;
-    color: #0070f3;
+  }
+  .meta {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+  
+  .links { display: flex; justify-content: center; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
+  .links a {
+    padding: 0.5rem 1.25rem;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    color: var(--accent);
     text-decoration: none;
-    font-weight: bold;
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-sm);
+    white-space: nowrap;
   }
 
   /* 本文のスタイル調整 */
   .markdown-content :global(h2) {
+    font-size: var(--fs-2xl);
+    font-weight: var(--fw-bold);
     margin-top: 3rem;
     padding-bottom: 0.5rem;
-    border-bottom: 2px solid #0070f3;
+    border-bottom: 2px solid var(--accent);
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
-  .markdown-content :global(p) { line-height: 1.8; margin-bottom: 1.5rem; }
+  .markdown-content :global(p) {
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
 
-    .back-link {
+  .back-link {
     display: inline-block;
     margin-top: 4rem;
     text-decoration: none;
-    color: #0070f3;
-    font-weight: bold;
+    color: var(--accent);
+    font-weight: var(--fw-bold);
+    font-size: var(--fs-sm);
+  }
+
+  @media (max-width: 480px) {
+    .project-detail { padding: 1.5rem 1rem; }
+    .detail-header h1 { font-size: var(--fs-3xl); }
   }
 </style>

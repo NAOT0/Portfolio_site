@@ -29,7 +29,7 @@ const featuredProjects = allProjects.slice(0, 2);
           <p class="name-en">Naoto Kagawa</p>
           <h1>加川 直澄</h1>
           <p class="description">
-            福井大学 工学部。趣味でwebアプリ開発をしています。<br>
+            福井大学 工学部。趣味でwebアプリ開発をしています。
           </p>
           <div class="hero-actions">
             <a href={`${base}/about/`} class="btn-main">About Me</a>
@@ -99,7 +99,7 @@ const featuredProjects = allProjects.slice(0, 2);
 <style>
   .top-container {
     max-width: 1000px;
-    margin: 4rem auto;
+    margin: 3rem auto;
     padding: 0 1.5rem;
     display: flex;
     flex-direction: column;
@@ -115,7 +115,7 @@ const featuredProjects = allProjects.slice(0, 2);
 
   .bento-item {
     background: #ffffff;
-    border: 1px solid #f1f5f9;
+    border: 1px solid var(--border);
     border-radius: 32px;
     padding: 2.5rem;
     transition: all 0.3s ease;
@@ -126,20 +126,48 @@ const featuredProjects = allProjects.slice(0, 2);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-color: transparent; /* 背景に馴染ませる */
+    border-color: transparent;
     background: #f8fafc;
   }
   
-  .name-en { font-size: 0.9rem; color: #94a3b8; font-weight: 600; margin-bottom: 0.2rem; }
-  h1 { font-size: 3.5rem; margin: 0; color: #1e293b; font-weight: 800; letter-spacing: -0.02em; }
-  .description { margin: 1rem 0 2rem; line-height: 1.7; color: #64748b; font-size: 1.05rem; }
+  .name-en {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    font-weight: var(--fw-semibold);
+    margin-bottom: 0.2rem;
+    /* 文字が途切れないよう */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  h1 {
+    font-size: var(--fs-5xl);
+    margin: 0;
+    color: var(--text-primary);
+    font-weight: var(--fw-extrabold);
+    letter-spacing: -0.02em;
+    /* 長い名前もはみ出さない */
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .description {
+    margin: 1rem 0 2rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    font-size: var(--fs-base);
+    /* 意図しない途中改行を防ぐ */
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
   
   .status-indicator {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.75rem;
-    font-weight: 700;
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
     color: #10b981;
     background: #ecfdf5;
     padding: 0.3rem 0.8rem;
@@ -151,15 +179,17 @@ const featuredProjects = allProjects.slice(0, 2);
 
   .btn-main {
     display: inline-block;
-    background: #1e293b;
+    background: var(--text-primary);
     color: white;
     padding: 0.8rem 2rem;
     border-radius: 14px;
     text-decoration: none;
-    font-weight: 600;
+    font-weight: var(--fw-semibold);
+    font-size: var(--fs-base);
     transition: all 0.2s;
+    white-space: nowrap;
   }
-  .btn-main:hover { background: #0070f3; transform: translateY(-2px); }
+  .btn-main:hover { background: var(--accent); transform: translateY(-2px); }
 
   /* リスト形式のデザイン共通化 */
   .section-header {
@@ -168,8 +198,24 @@ const featuredProjects = allProjects.slice(0, 2);
     align-items: center;
     margin-bottom: 1.5rem;
   }
-  .section-header h3 { font-size: 0.8rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em; margin: 0; }
-  .view-all, .view-all-link { font-size: 0.8rem; color: #0070f3; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 0.2rem; }
+  .section-header h3 {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-extrabold);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0;
+  }
+  .view-all, .view-all-link {
+    font-size: var(--fs-sm);
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: var(--fw-bold);
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    white-space: nowrap;
+  }
 
   .item-list { display: flex; flex-direction: column; }
   
@@ -178,74 +224,112 @@ const featuredProjects = allProjects.slice(0, 2);
     align-items: center;
     justify-content: space-between;
     padding: 1.25rem 0;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid var(--border);
     text-decoration: none;
     color: inherit;
+    gap: 0.5rem;
   }
   .list-item:last-child { border-bottom: none; padding-bottom: 0; }
-  .list-item h4 { margin: 0; font-size: 1rem; font-weight: 600; color: #1e293b; transition: color 0.2s; }
-  .list-item:hover h4 { color: #0070f3; }
+  .list-item h4 {
+    margin: 0;
+    font-size: var(--fs-base);
+    font-weight: var(--fw-semibold);
+    color: var(--text-primary);
+    transition: color 0.2s;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  .list-item:hover h4 { color: var(--accent); }
 
   /* プロジェクト特有のスタイル */
-  .project-item .item-content { display: flex; flex-direction: column; gap: 0.5rem; }
-  .tech-badges { display: flex; gap: 0.4rem; }
+  .project-item .item-content { display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+  .tech-badges { display: flex; gap: 0.4rem; flex-wrap: wrap; }
   .badge {
-    font-size: 0.65rem;
-    color: #64748b;
+    font-size: var(--fs-xs);
+    color: var(--text-secondary);
     background: #f1f5f9;
     padding: 2px 8px;
     border-radius: 6px;
-    font-weight: 600;
+    font-weight: var(--fw-semibold);
+    white-space: nowrap;
   }
-  .arrow-icon { color: #cbd5e1; transition: transform 0.2s; }
-  .project-item:hover .arrow-icon { transform: translateX(4px); color: #0070f3; }
+  .arrow-icon { color: #cbd5e1; transition: transform 0.2s; flex-shrink: 0; }
+  .project-item:hover .arrow-icon { transform: translateX(4px); color: var(--accent); }
 
   /* ニュース特有のスタイル */
-  .news-item { gap: 2rem; justify-content: flex-start; }
-  .news-meta { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
-  .news-meta time { font-size: 0.8rem; color: #94a3b8; font-family: monospace; width: 85px; }
-  .category-tag { font-size: 0.65rem; color: #0070f3; background: #eff6ff; padding: 2px 8px; border-radius: 4px; font-weight: 700; }
-  .item-link { flex: 1; text-decoration: none; color: inherit; }
-
-  /* レスポンシブ */
-  @media (max-width: 850px) {
-    .main-visual-grid { grid-template-columns: 1fr; }
-    h1 { font-size: 3rem; }
-    .news-item { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .news-item { gap: 1rem; justify-content: flex-start; }
+  .news-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+    flex-wrap: wrap;
   }
+  .news-meta time {
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+    font-family: 'Inter', monospace;
+    white-space: nowrap;
+  }
+  .category-tag {
+    font-size: var(--fs-xs);
+    color: var(--accent);
+    background: #eff6ff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: var(--fw-bold);
+    white-space: nowrap;
+  }
+  .item-link { flex: 1; text-decoration: none; color: inherit; min-width: 0; }
 
-  /* --- 追加するスタイル --- */
-
-.hero-actions {
-  display: flex;
-  align-items: center; /* 垂直方向を真ん中に揃える */
-  gap: 1.5rem;         /* ボタンとアイコン集の距離 */
-  margin-top: 2rem;
-}
-
-.hero-socials {
-  display: flex;
-  gap: 1rem;           /* アイコン同士の距離 */
-}
-
-.hero-icon {
-  width: 24px;
-  height: 24px;
-  color: #64748b;      /* アイコンの色 */
-  transition: all 0.2s ease;
-}
-
-.hero-socials a:hover .hero-icon {
-  color: #1e293b;      /* ホバー時に少し濃く */
-  transform: scale(1.1); /* ほんの少し大きく */
-}
-
-/* モバイル対応：画面が狭いときは縦に並べる */
-@media (max-width: 640px) {
+  /* --- hero actions --- */
   .hero-actions {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
   }
-}
+
+  .hero-socials {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .hero-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+  }
+
+  .hero-socials a:hover .hero-icon {
+    color: var(--text-primary);
+    transform: scale(1.1);
+  }
+
+  /* ==========================================
+     レスポンシブ
+     ========================================== */
+  @media (max-width: 768px) {
+    .main-visual-grid { grid-template-columns: 1fr; }
+    .bento-item { padding: 1.75rem; border-radius: 24px; }
+    h1 { font-size: var(--fs-4xl); }
+    .news-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .top-container { margin: 1.5rem auto; padding: 0 1rem; }
+    .bento-item { padding: 1.25rem; border-radius: 20px; }
+    h1 { font-size: var(--fs-3xl); }
+    .hero-actions {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+  }
 </style>
