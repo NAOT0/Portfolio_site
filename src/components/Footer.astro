@@ -1,5 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { profileData } from '../data/profile';
 ---
 
 <footer class="site-footer">
@@ -8,17 +9,14 @@ import { Icon } from 'astro-icon/components';
       <p>&copy; 2026 kagawa naoto</p>
     </div>
 
-    <div class="social-links">
-      <a href="https://github.com/あなたのユーザー名" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-        <Icon name="simple-icons:github" class="footer-icon" />
-      </a>
-      <a href="https://qiita.com/あなたのユーザー名" target="_blank" rel="noopener noreferrer" aria-label="Qiita">
-        <Icon name="simple-icons:qiita" class="footer-icon" />
-      </a>
-      <a href="https://x.com/あなたのユーザー名" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
-        <Icon name="simple-icons:x" class="footer-icon" />
-      </a>
-    </div>
+<div class="footer-socials">
+            <div class="social-links">
+            {profileData.links.map((link) => (
+            <a href={link.url} target="_blank" rel="noopener noreferrer" title={link.name}>
+            <Icon name={link.icon} class="footer-icon" />
+            </a>
+            ))}
+  </div>
   </div>
 </footer>
 
