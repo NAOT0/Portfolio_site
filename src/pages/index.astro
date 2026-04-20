@@ -5,7 +5,7 @@ import { Icon } from 'astro-icon/components';
 import { getCollection } from 'astro:content';
 
 // ベースパスを変数に入れておくと楽です
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const allNews = await getCollection('news');
 const latestNews = allNews
