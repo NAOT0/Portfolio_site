@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import { Profile } from '../components/Profile';
 import  History from '../components/History.astro';
 import HistoryMap from '../components/HistoryMap.tsx';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <Layout title="About Me | Naoto Kagawa">
@@ -24,6 +25,13 @@ import HistoryMap from '../components/HistoryMap.tsx';
             <dt>所属</dt>
             <dd>福井大学 工学部</dd>
 
+            <dt>制作物</dt>
+            <dd>
+              <a href={`${base}/projects/`} class="inline-link">
+                プロジェクト一覧
+                <svg class="inline-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+            </dd>
 
           </dl>
         </div>
@@ -46,6 +54,21 @@ import HistoryMap from '../components/HistoryMap.tsx';
       <HistoryMap client:visible />
     </div>
   </section>
+
+  <!-- See also: 関連ページへの薄いナビ -->
+  <div class="see-also">
+    <span class="see-also-label">See also</span>
+    <div class="see-also-links">
+      <a href={`${base}/projects/`} class="see-also-link">
+        Projects
+        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <a href={`${base}/news/`} class="see-also-link">
+        News
+        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
 
 
   </main>
@@ -104,6 +127,29 @@ import HistoryMap from '../components/HistoryMap.tsx';
     word-break: break-word;
   }
 
+  /* プロフィール内インラインリンク */
+  .inline-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: var(--fw-semibold);
+    font-size: var(--fs-sm);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .inline-link:hover {
+    border-bottom-color: var(--accent);
+  }
+  .inline-arrow {
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .inline-link:hover .inline-arrow {
+    transform: translateX(2px);
+  }
+
   /* スマホ対応 */
   @media (max-width: 600px) {
     .container { padding: 1.5rem 1rem; }
@@ -123,5 +169,52 @@ import HistoryMap from '../components/HistoryMap.tsx';
     border: 1px solid #eee;
     border-radius: 12px;
     overflow: hidden;
+  }
+
+  /* ==========================================
+     See also ナビ
+     ========================================== */
+  .see-also {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border, #f1f5f9);
+    flex-wrap: wrap;
+  }
+
+  .see-also-label {
+    font-size: var(--fs-xs);
+    font-weight: var(--fw-bold);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  .see-also-links {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .see-also-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: var(--fs-sm);
+    font-weight: var(--fw-semibold);
+    color: var(--text-secondary);
+    text-decoration: none;
+    background: #f1f5f9;
+    padding: 0.3rem 0.75rem;
+    border-radius: 99px;
+    transition: all 0.2s;
+  }
+  .see-also-link:hover {
+    background: #e0f0ff;
+    color: var(--accent);
   }
 </style>
