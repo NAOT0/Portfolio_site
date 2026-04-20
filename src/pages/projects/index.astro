@@ -1,0 +1,104 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+// ==========================================
+// 1. データ取得とカテゴリー抽出
+// ==========================================
+const allProjects = await getCollection('projects');
+// スキーマで定義された順序を維持しつつ、存在するカテゴリーだけを抽出
+const categories = [...new Set(allProjects.map(p => p.data.category))];
+---
+
+<Layout title="Projects | Naoto Kagawa">
+  <main class="projects-container">
+    <header class="page-header">
+      <h1 class="page-title">My Projects</h1>
+      <p class="page-subtitle">開発、研究、執筆の記録</p>
+    </header>
+
+    <nav class="filter-nav">
+      <button class="filter-btn active" data-target="all">All</button>
+      {categories.map(cat => (
+        <button class="filter-btn" data-target={cat}>{cat}</button>
+      ))}
+    </nav>
+
+    <div class="project-grid">
+      {allProjects.map(project => (
+        <article class="project-card" data-category={project.data.category}>
+          <div class="card-header">
+            <span class="category-badge">{project.data.category}</span>
+            <span class="date">{project.data.date}</span>
+          </div>
+          
+          <a href={`/projects/${project.id}`} class="title-link">
+            <h2>{project.data.title}</h2>
+          </a>
+          
+          <p class="description">{project.data.description}</p>
+          
+          <div class="tech-stack">
+            {project.data.tech.map(t => <span class="tech-tag">{t}</span>)}
+          </div>
+        </article>
+      ))}
+    </div>
+  </main>
+</Layout>
+
+<script>
+  // ==========================================
+  // 2. フィルタリング・ロジック (JavaScript)
+  // ==========================================
+  const buttons = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.project-card') as NodeListOf<HTMLElement>;
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // ボタンの状態管理
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const target = btn.getAttribute('data-target');
+
+      // カードの表示/非表示を切り替え
+      cards.forEach(card => {
+        const cat = card.getAttribute('data-category');
+        if (target === 'all' || cat === target) {
+          card.style.display = 'flex'; // grid内の要素として表示
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  /* --- デザインの概要 --- */
+  /* .filter-nav: ボタンの並び。flex-wrapでスマホ対応 */
+  /* .filter-btn: アクティブ時にテーマカラー（青）に変化 */
+  /* .project-card: Bento風の角丸白背景 */
+
+  .projects-container { max-width: 1000px; margin: 4rem auto; padding: 0 1.5rem; }
+  
+  .filter-nav { display: flex; gap: 0.5rem; margin-bottom: 3rem; flex-wrap: wrap; }
+  
+  .filter-btn {
+    padding: 0.4rem 1.2rem; border-radius: 99px; border: 1px solid #e2e8f0;
+    background: white; color: #64748b; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  }
+  .filter-btn.active { background: #0070f3; color: white; border-color: #0070f3; }
+
+  .project-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .project-card { 
+    background: white; border: 1px solid #f1f5f9; border-radius: 24px; padding: 2rem;
+    display: flex; flex-direction: column; 
+  }
+  
+  .category-badge { font-size: 0.7rem; font-weight: 700; color: #0070f3; background: #eff6ff; padding: 2px 8px; border-radius: 6px; }
+  .tech-tag { font-size: 0.7rem; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; color: #475569; }
+  
+  @media (max-width: 768px) { .project-grid { grid-template-columns: 1fr; } }
+</style>

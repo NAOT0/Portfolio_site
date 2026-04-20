@@ -1,0 +1,110 @@
+---
+// src/pages/about.astro
+import Layout from '../layouts/Layout.astro';
+import { Profile } from '../components/Profile';
+import { History } from '../components/History';
+import HistoryMap from '../components/HistoryMap.tsx';
+---
+
+<Layout title="About Me | Naoto Kagawa">
+  <main class="container">
+    <h1>About Me</h1>
+
+    <section class="profile-section">
+      <h2>Profile</h2>
+      <div class="profile-grid">
+        <div class="profile-info">
+          <dl>
+            <dt>氏名</dt>
+            <dd>加川 直澄 (Kagawa Naoto)</dd>
+            
+            <dt>出身地</dt>
+            <dd>埼玉県と兵庫県</dd>
+            
+            <dt>所属</dt>
+            <dd>福井大学 工学部</dd>
+
+
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section>
+
+      <History client:load />
+
+    </section>
+
+
+  <section class="map-section">
+    <h2>いままで住んだ場所</h2>
+    <p>これまでにゆかりのあった場所をプロットしました。</p>
+    
+    <div class="map-container">
+      {/* Reactコンポーネントを呼び出し */}
+      <HistoryMap client:visible />
+    </div>
+  </section>
+
+
+  </main>
+</Layout>
+
+<style>
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+  
+  h1 { font-size: 2.5rem; margin-bottom: 2rem; }
+  h2 { 
+    font-size: 1.8rem; 
+    margin-top: 3rem; 
+    margin-bottom: 1.5rem;
+    border-left: 4px solid #0070f3;
+    padding-left: 1rem;
+  }
+
+  /* Profileのスタイル */
+  .profile-grid {
+    background: #f9fafb;
+    padding: 2rem;
+    border-radius: 12px;
+  }
+  
+  dl {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 1rem;
+  }
+
+  dt {
+    font-weight: bold;
+    color: #666;
+  }
+
+  dd {
+    margin: 0;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  /* スマホ対応 */
+  @media (max-width: 600px) {
+    dl {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+    dt { margin-top: 0.8rem; }
+  }
+
+  .map-container {
+    max-width: 100%;
+    margin: 2rem 0;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+</style>

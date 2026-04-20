@@ -1,0 +1,120 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+// 1. ページを生成するためのパス（URL）を定義
+export async function getStaticPaths() {
+  const newsEntries = await getCollection('news');
+  return newsEntries.map((entry) => ({
+    // パラメータ名はファイル名の [slug] に合わせますが、値は entry.id を使います
+    params: { slug: entry.id }, 
+    props: { entry },
+  }));
+}
+
+// 2. Propsから記事データを取得
+const { entry } = Astro.props;
+
+// 3. Markdownをレンダリング（v5以降の新しい書き方）
+const { Content } = await render(entry);
+---
+
+<Layout title={`${entry.data.title} | News`}>
+  <article class="news-post">
+    <header class="post-header">
+      <div class="meta">
+        <time datetime={entry.data.publishDate.toISOString()}>
+          {entry.data.publishDate.toLocaleDateString('ja-JP', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}
+        </time>
+        <span class="category-badge">{entry.data.category}</span>
+      </div>
+      <h1>{entry.data.title}</h1>
+      {entry.data.description && <p class="description">{entry.data.description}</p>}
+      <hr />
+    </header>
+    
+    <div class="post-content">
+      <Content />
+    </div>
+
+    <footer>
+      <a href="/news" class="back-link">← ニュース一覧に戻る</a>
+    </footer>
+  </article>
+</Layout>
+
+<style>
+  .news-post {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
+  .post-header {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+  .meta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: #666;
+    font-size: 0.9rem;
+  }
+  .category-badge {
+    background: #e0f2fe;
+    color: #0070f3;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  h1 {
+    font-size: 2.5rem;
+    margin: 0.5rem 0 1.5rem;
+    line-height: 1.2;
+  }
+  .description {
+    font-size: 1.1rem;
+    color: #444;
+    font-style: italic;
+  }
+  hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin-top: 2rem;
+  }
+
+  /* 記事本文のスタイル */
+  .post-content {
+    line-height: 1.8;
+    font-size: 1.1rem;
+  }
+  .post-content :global(h2) {
+    font-size: 1.8rem;
+    margin-top: 2.5rem;
+    border-left: 4px solid #0070f3;
+    padding-left: 1rem;
+  }
+  .post-content :global(p) {
+    margin-bottom: 1.5rem;
+  }
+  .post-content :global(strong) {
+    color: #0070f3;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 4rem;
+    text-decoration: none;
+    color: #0070f3;
+    font-weight: bold;
+  }
+  .back-link:hover {
+    text-decoration: underline;
+  }
+</style>

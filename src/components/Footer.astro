@@ -1,0 +1,78 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="copyright">
+      <p>&copy; 2026 kagawa naoto</p>
+    </div>
+
+    <div class="social-links">
+      <a href="https://github.com/あなたのユーザー名" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <Icon name="simple-icons:github" class="footer-icon" />
+      </a>
+      <a href="https://qiita.com/あなたのユーザー名" target="_blank" rel="noopener noreferrer" aria-label="Qiita">
+        <Icon name="simple-icons:qiita" class="footer-icon" />
+      </a>
+      <a href="https://x.com/あなたのユーザー名" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+        <Icon name="simple-icons:x" class="footer-icon" />
+      </a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    width: 100%;
+    padding: 4rem 0 3rem; /* 上に広めの余白を取ってメインコンテンツと分離 */
+    border-top: 1px solid #f1f5f9;
+    margin-top: auto; /* コンテンツが少ない時も下部に固定 */
+  }
+
+  .footer-container {
+    max-width: 1000px; /* メインコンテンツの幅に合わせる */
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* コピーライトの文字 */
+  .copyright p {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    font-weight: 500;
+  }
+
+  /* アイコンエリア */
+  .social-links {
+    display: flex;
+    gap: 1.5rem; /* アイコン同士の間隔 */
+    align-items: center;
+  }
+
+  /* アイコン本体のスタイル */
+  .footer-icon {
+    width: 28px;  /* サイズを大きく */
+    height: 28px;
+    color: #64748b; /* デフォルトは落ち着いたグレー */
+    transition: all 0.3s ease;
+  }
+
+  /* ホバー時の挙動 */
+  .social-links a:hover .footer-icon {
+    color: #1e293b; /* 濃い色にする、またはテーマカラーの #0070f3 に変更 */
+    transform: translateY(-3px); /* 少し上に浮かせる */
+  }
+
+  /* スマホ表示 */
+  @media (max-width: 640px) {
+    .footer-container {
+      flex-direction: column-reverse;
+      gap: 1.5rem;
+      text-align: center;
+    }
+  }
+</style>

@@ -12,6 +12,23 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.1.8"
+    "@astro-community/astro-embed-youtube": "^0.5.10",
+    "@astrojs/react": "^5.0.3",
+    "@iconify-json/mdi": "^1.2.3",
+    "@iconify-json/simple-icons": "^1.2.79",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "astro": "^6.1.8",
+    "astro-icon": "^1.1.5",
+    "d3-geo": "^3.1.1",
+    "lucide-react": "^1.8.0",
+    "prop-types": "^15.8.1",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-simple-maps": "^3.0.0"
+  },
+  "devDependencies": {
+    "@iconify-json/ri": "^1.2.10",
+    "@types/react-simple-maps": "^3.0.6"
   }
 }

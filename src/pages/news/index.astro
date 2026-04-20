@@ -1,0 +1,155 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+// ==========================================
+// 【データ取得】全ニュースを取得し日付順にソート
+// ==========================================
+const allNews = (await getCollection('news')).sort(
+  (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+const categories = [...new Set(allNews.map((post) => post.data.category))];
+---
+
+<Layout title="News | Naoto Kagawa">
+  <main class="news-container">
+    <header class="page-header">
+      <h1 class="page-title">News & Activities</h1>
+      <p class="page-subtitle">日々の活動や制作の記録</p>
+    </header>
+
+    <nav class="filter-bar">
+      <button class="filter-btn active" data-target="all">All</button>
+      {categories.map(cat => (
+        <button class="filter-btn" data-target={cat}>{cat}</button>
+      ))}
+    </nav>
+
+    <div class="news-list" id="news-list">
+      {allNews.map(post => (
+        <article class="news-item" data-category={post.data.category}>
+          <div class="meta">
+            <time datetime={post.data.publishDate.toISOString()}>
+              {post.data.publishDate.toLocaleDateString('ja-JP')}
+            </time>
+            <span class="category-tag">{post.data.category}</span>
+          </div>
+          
+          <div class="content">
+            <a href={`/news/${post.id}`} class="news-link">
+              <h2>{post.data.title}</h2>
+            </a>
+            {post.data.description && <p class="description">{post.data.description}</p>}
+          </div>
+        </article>
+      ))}
+    </div>
+  </main>
+</Layout>
+
+<script>
+  // ==========================================
+  // 【ロジック】ボタンクリック時の絞り込み処理
+  // ==========================================
+  const buttons = document.querySelectorAll('.filter-btn');
+  const items = document.querySelectorAll('.news-item') as NodeListOf<HTMLElement>;
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // 全ボタンからactiveを消して、クリックしたものだけに付与
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const target = btn.getAttribute('data-target');
+      items.forEach(item => {
+        const cat = item.getAttribute('data-category');
+        // 'all' か カテゴリが一致すれば表示、それ以外は非表示
+        item.style.display = (target === 'all' || cat === target) ? 'grid' : 'none';
+      });
+    });
+  });
+</script>
+
+<style>
+  /* --- 1. レイアウト全体 --- */
+  .news-container {
+    max-width: 850px;
+    margin: 4rem auto;
+    padding: 0 1.5rem;
+  }
+
+  .page-header { margin-bottom: 3rem; }
+  .page-title { font-size: 2.5rem; font-weight: 800; color: #1e293b; margin: 0; }
+  .page-subtitle { color: #94a3b8; margin-top: 0.5rem; }
+
+  /* --- 2. フィルターボタンのデザイン (ここを修正) --- */
+  .filter-bar {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 1.5rem;
+  }
+
+  .filter-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 99px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    color: #64748b;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  /* ホバーした時の色 */
+  .filter-btn:hover {
+    border-color: #0070f3;
+    color: #0070f3;
+  }
+
+  /* 選択されている時の色 */
+  .filter-btn.active {
+    background: #1e293b; /* ここを #0070f3 にすると青になります */
+    color: white;
+    border-color: #1e293b;
+  }
+
+  /* --- 3. ニュースリストのデザイン --- */
+  .news-list { display: flex; flex-direction: column; }
+  
+  .news-item {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    padding: 2rem 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  
+  .meta { display: flex; flex-direction: column; gap: 0.5rem; }
+  .meta time { font-family: monospace; color: #94a3b8; font-size: 0.9rem; }
+  
+  .category-tag {
+    width: fit-content;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #0070f3;
+    background: #eff6ff;
+    padding: 2px 10px;
+    border-radius: 6px;
+    text-transform: uppercase;
+  }
+
+  .news-link { text-decoration: none; color: #1e293b; }
+  .news-link:hover h2 { color: #0070f3; }
+  h2 { font-size: 1.25rem; margin: 0 0 0.5rem 0; transition: color 0.2s; }
+  
+  .description { font-size: 0.95rem; color: #64748b; line-height: 1.6; margin: 0; }
+
+  /* スマホ表示の調整 */
+  @media (max-width: 640px) {
+    .news-item { grid-template-columns: 1fr; gap: 1rem; }
+    .meta { flex-direction: row; align-items: center; justify-content: space-between; }
+  }
+</style>
