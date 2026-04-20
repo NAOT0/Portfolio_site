@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 // ==========================================
 // 【データ取得】全ニュースを取得し日付順にソート
 // ==========================================
@@ -36,7 +36,7 @@ const categories = [...new Set(allNews.map((post) => post.data.category))];
           </div>
           
           <div class="content">
-            <a href={`/news/${post.id}`} class="news-link">
+            <a href={`${base}/news/${post.id}`} class="news-link">
               <h2>{post.data.title}</h2>
             </a>
             {post.data.description && <p class="description">{post.data.description}</p>}

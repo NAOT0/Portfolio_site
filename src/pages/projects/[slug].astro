@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
   return projects.map(entry => ({
@@ -32,6 +32,9 @@ const { Content } = await render(entry);
     <div class="markdown-content">
       <Content />
     </div>
+        <footer>
+      <a href={`${base}/projects/`} class="back-link">← プロジェクト一覧に戻る</a>
+    </footer>
   </article>
 </Layout>
 
@@ -57,4 +60,12 @@ const { Content } = await render(entry);
     border-bottom: 2px solid #0070f3;
   }
   .markdown-content :global(p) { line-height: 1.8; margin-bottom: 1.5rem; }
+
+    .back-link {
+    display: inline-block;
+    margin-top: 4rem;
+    text-decoration: none;
+    color: #0070f3;
+    font-weight: bold;
+  }
 </style>
