@@ -3,24 +3,23 @@ import Layout from '../layouts/Layout.astro';
 import { profileData } from '../data/profile';
 import { Icon } from 'astro-icon/components';
 import { getCollection } from 'astro:content';
-// 1. 最新のニュースを3件だけ取得（日付の新しい順）
+
+// ベースパスを変数に入れておくと楽です
+const base = import.meta.env.BASE_URL;
+
 const allNews = await getCollection('news');
 const latestNews = allNews
   .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
   .slice(0, 3);
 
-// プロジェクトの最新2件を取得
 const allProjects = await getCollection('projects');
 const featuredProjects = allProjects.slice(0, 2);
-
 ---
 
 <Layout title="Naoto Kagawa | Portfolio">
   <main class="top-container">
-    <!-- 上段: 名前 + プロジェクトの2カラム -->
     <div class="main-visual-grid">
       
-      <!-- ヒーローセクション -->
       <section class="bento-item hero">
         <div class="hero-inner">
           <div class="status-indicator">
@@ -33,27 +32,26 @@ const featuredProjects = allProjects.slice(0, 2);
             福井大学 工学部。趣味でwebアプリ開発をしています。<br>
           </p>
           <div class="hero-actions">
-            <a href={`${import.meta.env.BASE_URL}/about/`}>About Me</a>
+            <a href={`${base}/about/`} class="btn-main">About Me</a>
             <div class="hero-socials">
-            {profileData.links.map((link) => (
-            <a href={link.url} target="_blank" rel="noopener noreferrer" title={link.name}>
-            <Icon name={link.icon} class="hero-icon" />
-            </a>
-            ))}
-  </div>
+              {profileData.links.map((link) => (
+                <a href={link.url} target="_blank" rel="noopener noreferrer" title={link.name}>
+                  <Icon name={link.icon} class="hero-icon" />
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- プロジェクトセクション: 名前の横に配置 -->
       <section class="bento-item featured-projects">
         <div class="section-header">
           <h3>Featured Projects</h3>
-          <a href="/projects" class="view-all-link">All <Icon name="mdi:arrow-right" /></a>
+          <a href={`${base}/projects/`} class="view-all-link">All <Icon name="mdi:arrow-right" /></a>
         </div>
         <div class="item-list">
           {featuredProjects.map(p => (
-            <a href={`/projects/${p.id}`} class="list-item project-item">
+            <a href={`${base}/projects/${p.id}/`} class="list-item project-item">
               <div class="item-content">
                 <h4>{p.data.title}</h4>
                 <div class="tech-badges">
@@ -69,11 +67,10 @@ const featuredProjects = allProjects.slice(0, 2);
       </section>
     </div>
 
-    <!-- 下段: ニュース (全幅) -->
     <section class="bento-item recent-news">
       <div class="section-header">
         <h3>Latest News</h3>
-        <a href="/news" class="view-all">すべて見る →</a>
+        <a href={`${base}/news/`} class="view-all">すべて見る →</a>
       </div>
 
       {latestNews.length > 0 ? (
@@ -86,7 +83,7 @@ const featuredProjects = allProjects.slice(0, 2);
                 </time>
                 <span class="category-tag">{post.data.category}</span>
               </div>
-              <a href={`/news/${post.id}`} class="item-link">
+              <a href={`${base}/news/${post.id}/`} class="item-link">
                 <h4>{post.data.title}</h4>
               </a>
             </article>
