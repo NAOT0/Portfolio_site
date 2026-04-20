@@ -32,7 +32,7 @@ const featuredProjects = allProjects.slice(0, 2);
             福井大学 工学部。趣味でwebアプリ開発をしています。<br>
           </p>
           <div class="hero-actions">
-            <a href={`${base}about/`} class="btn-main">About Me</a>
+            <a href={`${base}/about/`} class="btn-main">About Me</a>
             <div class="hero-socials">
               {profileData.links.map((link) => (
                 <a href={link.url} target="_blank" rel="noopener noreferrer" title={link.name}>
@@ -47,11 +47,11 @@ const featuredProjects = allProjects.slice(0, 2);
       <section class="bento-item featured-projects">
         <div class="section-header">
           <h3>Featured Projects</h3>
-          <a href={`${base}projects/`} class="view-all-link">All <Icon name="mdi:arrow-right" /></a>
+          <a href={`${base}/projects/`} class="view-all-link">All <Icon name="mdi:arrow-right" /></a>
         </div>
         <div class="item-list">
           {featuredProjects.map(p => (
-            <a href={`${base}projects/${p.id}/`} class="list-item project-item">
+            <a href={`${base}/projects/${p.id}/`} class="list-item project-item">
               <div class="item-content">
                 <h4>{p.data.title}</h4>
                 <div class="tech-badges">
@@ -83,7 +83,7 @@ const featuredProjects = allProjects.slice(0, 2);
                 </time>
                 <span class="category-tag">{post.data.category}</span>
               </div>
-              <a href={`${base}news/${post.id}/`} class="item-link">
+              <a href={`${base}/news/${post.id}/`} class="item-link">
                 <h4>{post.data.title}</h4>
               </a>
             </article>
