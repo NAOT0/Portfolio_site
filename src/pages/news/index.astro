@@ -36,7 +36,7 @@ const categories = [...new Set(allNews.map((post) => post.data.category))];
           </div>
           
           <div class="content">
-            <a href={`${base}/news/${post.id}`} class="news-link">
+            <a href={`${base}/news/${post.id}/`} class="news-link">
               <h2>{post.data.title}</h2>
             </a>
             {post.data.description && <p class="description">{post.data.description}</p>}

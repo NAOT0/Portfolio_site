@@ -32,7 +32,7 @@ const categories = [...new Set(allProjects.map(p => p.data.category))];
             <span class="date">{project.data.date}</span>
           </div>
           
-          <a href={`${base}/projects/${project.id}`} class="project-link">
+          <a href={`${base}/projects/${project.id}/`} class="project-link">
             <h2>{project.data.title}</h2>
           </a>
           
