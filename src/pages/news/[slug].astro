@@ -139,4 +139,59 @@ const { Content } = await render(entry);
     h1 { font-size: var(--fs-3xl); }
     .post-content { font-size: var(--fs-sm); }
   }
+/* 画像を囲む枠（figure）の設定 */
+.post-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 横方向の中央揃え */
+  justify-content: center;
+  margin: 2rem auto;   /* 上下に余白を作り、左右を自動（中央）にする */
+  width: 100%;         /* 親要素の幅いっぱいに広げる */
+}
+
+/* 画像自体の設定 */
+.post-image img {
+  display: block;
+  margin: 0 auto;      /* 左右中央寄せ */
+  max-width: 100%;     /* 画面からはみ出さないように */
+  height: auto;        /* アスペクト比を維持 */
+}
+
+/* キャプション（figcaption）の設定 */
+.post-image figcaption {
+  text-align: center;  /* テキストを中央寄せ */
+  margin-top: 0.8rem;  /* 画像との間隔 */
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.image-grid {
+  display: flex;      /* 横並びにする */
+  gap: 1rem;          /* 画像同士の間隔 */
+  margin: 2rem 0;
+  width: 100%;
+}
+
+.image-grid figure {
+  flex: 1;            /* 画像を均等な幅にする */
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-grid img {
+  width: 100%;        /* 親の幅に合わせる */
+  height: auto;
+  object-fit: cover;  /* 画像の比率が違う場合、綺麗に切り抜く */
+  aspect-ratio: 4 / 3; /* 比率を統一したい場合はこれを入れる */
+  border-radius: 8px;
+}
+
+/* 【重要】スマホ対応：画面が狭いときは縦並びに戻す */
+@media (max-width: 640px) {
+  .image-grid {
+    flex-direction: column;
+  }
+}
 </style>
