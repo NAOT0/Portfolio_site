@@ -25,13 +25,97 @@ const { title } = Astro.props;
 		<Header /> <main>
 			<slot /> </main>
 
-		<Footer /> </body>
+		<Footer />
+	
+	<script>
+	// ページ内のすべての <pre> タグ（コードブロック）を取得
+	const preTags = document.querySelectorAll("pre");
+
+	preTags.forEach((pre) => {
+		// ボタン要素を作成
+		const copyButton = document.createElement("button");
+		copyButton.className = "copy-button";
+		copyButton.textContent = "コピー";
+
+		// <pre> タグの中にボタンを追加
+		pre.appendChild(copyButton);
+
+		// ボタンがクリックされた時の処理
+		copyButton.addEventListener("click", async () => {
+		// <code> タグの中身（実際のコード）を取得
+		const code = pre.querySelector("code")?.innerText || "";
+
+		try {
+			// クリップボードに書き込む（コピーする）
+			await navigator.clipboard.writeText(code);
+			
+			// コピー成功時の見た目変更
+			copyButton.textContent = "コピー完了";
+			copyButton.classList.add("copied");
+
+			// 2秒後に元の「コピー」に戻す
+			setTimeout(() => {
+			copyButton.textContent = "コピー";
+			copyButton.classList.remove("copied");
+			}, 2000);
+		} catch (err) {
+			console.error("コピーに失敗しました", err);
+		}
+		});
+	});
+	</script>
+	</body>
 </html>
 
 <style is:global>
 	/* ==========================================
 	   全ページ共通 デザイントークン & ベーススタイル
 	   ========================================== */
+
+	/* コピーボタンの親要素(preタグ)の基準位置を設定 */
+/* コードブロック全体の枠 */
+	pre {
+	position: relative;
+	/* ボタンと重ならないよう、右側に広めの余白を作る */
+	padding-right: 4rem !important; 
+	padding-top: 1.5rem !important; /* 上側にも少し余裕を */
+	overflow-x: auto; /* 横スクロールを有効に */
+	border-radius: 8px;
+	}
+
+	/* コピーボタンのスタイル修正 */
+	.copy-button {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	z-index: 10; /* 他の要素より上に表示 */
+	
+	/* ボタンを目立たせる設定 */
+	background-color: rgba(75, 85, 99, 0.9); /* 少し透過させて馴染ませる */
+	color: #ffffff;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 6px;
+	padding: 4px 10px;
+	font-size: 0.75rem;
+	line-height: 1;
+	cursor: pointer;
+	
+	/* ボタンのテキストを選択されないようにする */
+	user-select: none;
+	transition: all 0.2s;
+	}
+
+	/* ホバー時 */
+	.copy-button:hover {
+	background-color: rgba(55, 65, 81, 1);
+	transform: scale(1.05); /* 少しだけ大きくして反応を示す */
+	}
+
+	/* コピー完了時（緑色） */
+	.copy-button.copied {
+	background-color: #10b981;
+	border-color: #059669;
+	}
 	:root {
 		/* カラー */
 		--accent: #0070f3;

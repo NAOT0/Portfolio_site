@@ -31,6 +31,63 @@ my-website/
       └── profile.jpg  (画像素材)
 ```
 
+サンプルコードは以下のようになります。
+index.html
+
+```html
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ホーム | サンプルサイト</title>
+  </head>
+  <body>
+    <h1>こんにちは！</h1>
+    <p>トップページです。</p>
+    <hr />
+    <a href="./about.html">Aboutページ（自己紹介）へ行く</a>
+  </body>
+</html>
+```
+
+about.html
+
+```html
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>About | 自己紹介</title>
+  </head>
+  <body>
+    <h1>自己紹介ページ</h1>
+    <p>Web制作を学んでいます。</p>
+    <hr />
+    <a href="./index.html">ホームに戻る</a>
+  </body>
+</html>
+```
+
+css/style.css
+
+```css
+body {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f0f4f8;
+  color: #333;
+}
+
+h1 {
+  color: #0070f3;
+}
+```
+
 ## 2. リンクと画像の正しい書き方（パスの指定）
 
 複数ページのサイトを作成する際、よくつまづくのが画像の表示や別ページへのルーティング（パスの指定）です。
