@@ -58,6 +58,7 @@ pip install torch
 ### 1. プログラムの作成
 
 作業ディレクトリ内に `simple_sim.py` を作成し、以下のコードを保存します。
+今回は教師あり学習を採用
 
 ```python
 import flwr as fl
@@ -75,7 +76,7 @@ class SimpleLinearModel(nn.Module):
     def forward(self, x):
         return self.linear(x)
 
-# 2. データの生成（各ノードに異なるデータを割り当て）
+# 2. データの生成（各デバイスが持つデータと考えればいい）
 def load_simple_data(cid):
     if cid == "0":
         x = torch.tensor([[1.0], [2.0], [3.0]])
