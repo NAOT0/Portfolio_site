@@ -122,6 +122,29 @@ const { Content } = await render(entry);
     color: var(--accent);
   }
 
+  /* コードブロック（複数行） */
+  .post-content :global(pre) {
+    padding: 1.25rem 1.5rem;
+    border-radius: 8px;
+    line-height: 1.7;
+    overflow-x: auto;       /* 横に長いコードはスクロールさせる */
+    margin-bottom: 1.5rem;
+  }
+  .post-content :global(pre code) {
+    padding: 0;              /* pre側で余白を持たせるので code側は0に */
+    background: none;        /* 二重背景を防ぐ */
+    font-size: var(--fs-sm);
+  }
+
+  /* インラインコード（文中の `code` 表記） */
+  .post-content :global(:not(pre) > code) {
+    background: var(--code-inline-bg, #f0f0f0);
+    color: var(--accent);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+
   .back-link {
     display: inline-block;
     margin-top: 4rem;

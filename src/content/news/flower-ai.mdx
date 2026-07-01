@@ -1,0 +1,187 @@
+---
+title: "Ubuntuで始める連合学習（Federated Learning）実践マニュアル"
+publishDate: 2026-07-01
+category: "Tech"
+description: "Ubuntu環境でFlowerフレームワークを用いた連合学習のシミュレーション環境を構築し、複数ノードが生データを共有せずに回帰モデルを連合学習を試してみる"
+---
+
+## はじめに
+
+Ubuntu環境において「[Flower](https://flower.ai/)」フレームワークを用いた連合学習のシミュレーション環境を構築し、連合学習を体験する手順をまとめたものです
+
+連合学習とは、複数の端末やノードがそれぞれの手元にあるデータを外部に出すことなく、モデルの「重み」だけをやり取りして協調的に学習を進める手法で、分散機械学習モデルの構築が可能になります。
+
+## 第1章：環境構築
+
+システム環境をクリーンに保つため、Pythonの仮想環境（venv）上に構築します。
+
+### 1. 必要なパッケージのインストール
+
+ターミナルを開き、以下のコマンドでシステムを更新し、仮想環境用のツールをインストールします。
+
+```bash
+sudo apt update
+sudo apt install python3 python3-pip python3-venv -y
+```
+
+### 2. 仮想環境の作成と有効化
+
+作業用のディレクトリを作成し、仮想環境を構築・有効化します。
+
+```bash
+mkdir flwr-project
+cd flwr-project
+python3 -m venv flwr-env
+source flwr-env/bin/activate
+```
+
+> **Note:** 以降の作業は、ターミナルの先頭に `(flwr-env)` が表示されている状態で行ってください。
+
+### 3. ライブラリのインストール
+
+Flower本体と、計算を担うPyTorchをインストールします。仮想マシンのディスク容量やメモリに合わせて軽量版の使用も検討してください。
+
+```bash
+pip install --upgrade pip
+pip install "flwr[simulation]"
+pip install torch
+```
+
+**トラブルシューティング**
+
+インストール中に `OSError(28, 'デバイスに空き領域がありません')` が発生した場合は、Ubuntuのディスク容量が枯渇しています。仮想化ソフト（VMware等）の設定から仮想ディスクのサイズを拡張し、Ubuntu側で GParted を用いてパーティション（`/dev/sda5` 等）を広げてください。
+
+## 第2章：連合学習シミュレーションの実行
+
+連合学習の基本プロセスを確認するため、「3つのノードがそれぞれ異なる断片的なデータを持ち、互いの生データを見せずに協力して `y = 2x + 1` の法則を導き出す」プログラムを実行します。
+
+### 1. プログラムの作成
+
+作業ディレクトリ内に `simple_sim.py` を作成し、以下のコードを保存します。
+
+```python
+import flwr as fl
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from flwr.common import Context
+
+# 1. AIモデルの定義（1入力・1出力の線形回帰）
+class SimpleLinearModel(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.linear = nn.Linear(1, 1)
+
+    def forward(self, x):
+        return self.linear(x)
+
+# 2. データの生成（各ノードに異なるデータを割り当て）
+def load_simple_data(cid):
+    if cid == "0":
+        x = torch.tensor([[1.0], [2.0], [3.0]])
+    elif cid == "1":
+        x = torch.tensor([[4.0], [5.0], [6.0]])
+    else:
+        x = torch.tensor([[1.0], [9.0], [11.0]])
+
+    # 全員共通の正解ルール
+    y = 2.0 * x + 1.0
+    return x, y
+
+# 3. クライアントの定義
+class FlowerClient(fl.client.NumPyClient):
+    def __init__(self, cid):
+        self.cid = cid
+        self.model = SimpleLinearModel()
+        self.x, self.y = load_simple_data(cid)
+
+    def get_parameters(self, config):
+        return [val.cpu().numpy() for _, val in self.model.state_dict().items()]
+
+    def fit(self, parameters, config):
+        # サーバーから重みを受信して適用
+        params_dict = zip(self.model.state_dict().keys(), parameters)
+        state_dict = {k: torch.tensor(v) for k, v in params_dict}
+        self.model.load_state_dict(state_dict, strict=True)
+
+        # ローカル学習ループ
+        optimizer = optim.SGD(self.model.parameters(), lr=0.01)
+        criterion = nn.MSELoss()
+
+        self.model.train()
+        for epoch in range(5):
+            optimizer.zero_grad()
+            outputs = self.model(self.x)
+            loss = criterion(outputs, self.y)
+            loss.backward()
+            optimizer.step()
+
+        # 更新した重みをサーバーへ返却
+        return self.get_parameters(config), len(self.x), {}
+
+    def evaluate(self, parameters, config):
+        # 最新のモデルで評価
+        params_dict = zip(self.model.state_dict().keys(), parameters)
+        state_dict = {k: torch.tensor(v) for k, v in params_dict}
+        self.model.load_state_dict(state_dict, strict=True)
+
+        w = self.model.linear.weight.item()
+        b = self.model.linear.bias.item()
+
+        self.model.eval()
+        with torch.no_grad():
+            outputs = self.model(self.x)
+            loss = nn.MSELoss()(outputs, self.y).item()
+
+        print(f"[ノード {self.cid}] 現在の推論式: $y={w:.2f}x+{b:.2f}$ (誤差: {loss:.4f})")
+        return float(loss), len(self.x), {}
+
+# 4. シミュレーションの開始
+def client_fn(context: Context):
+    cid = str(context.node_id)
+    return FlowerClient(cid).to_client()
+
+if __name__ == "__main__":
+    print("=== 3ノードでの連合学習を開始します ===")
+    fl.simulation.start_simulation(
+        client_fn=client_fn,
+        num_clients=3,
+        config=fl.server.ServerConfig(num_rounds=5),
+    )
+```
+
+### 2. プログラムの実行
+
+ターミナルで以下のコマンドを実行します。
+
+```bash
+python simple_sim.py
+```
+
+## 第3章：学習プロセスと評価指標の理解
+
+### 連合学習のサイクル
+
+スクリプト実行時、裏側では以下のサイクルが設定したラウンド数（今回は5回）繰り返されています。
+
+1. **ブロードキャスト**：サーバーが初期状態（または前ラウンドの集約後）のモデルの「重み」を各ノードへ送信。
+2. **ローカル学習（fit）**：各ノードが自身の手元にある生データのみを使用して学習を行い、重みを微調整する。生データは外部へ一切送信されない。
+3. **集約（Aggregation）**：サーバーが各ノードから更新された「重み」だけを回収し、平均化して新しいグローバルモデルを生成する。
+
+### 評価指標：平均二乗誤差（MSE）
+
+今回のスクリプトでは、回帰問題で標準的に用いられる平均二乗誤差（Mean Squared Error）を使用しています。数式で表すと以下のようになります。
+
+$$
+MSE = \frac{1}{N}\sum_{i=1}^{N}(y_i-\hat{y}_i)^2
+$$
+
+- `y_i`：実際の正解値
+- `ŷ_i`：AIが算出した予測値
+- `N`：データ数
+
+ラウンドが進むにつれてこのMSEが `0` に近づき、最終的にすべてのノードで算出される式が `y = 2.00x + 1.00` へと収束していくことが確認できます。
+
+## まとめ
+
+以上が、Ubuntu環境でFlowerを用いて連合学習の基礎プロセスを体験するまでの手順です。
