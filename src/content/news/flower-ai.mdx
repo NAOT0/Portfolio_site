@@ -5,6 +5,9 @@ category: "Tech"
 description: "Ubuntu環境でFlowerフレームワークを用いた連合学習のシミュレーション環境を構築し、複数ノードが生データを共有せずに回帰モデルを連合学習を試してみる"
 ---
 
+import { Image } from "astro:assets";
+import img from "./images/pages/flower/flower_result.png";
+
 ## はじめに
 
 Ubuntu環境において「[Flower](https://flower.ai/)」フレームワークを用いた連合学習のシミュレーション環境を構築し、連合学習を体験する手順をまとめたものです
@@ -158,6 +161,17 @@ if __name__ == "__main__":
 ```bash
 python simple_sim.py
 ```
+
+実行結果はこのようになります
+
+<figure class="post-image">
+  <Image src={img} width={1200} height={600} alt="結果" />
+</figure>
+
+
+ラウンドが進むごとにMSEが低下していることがわかります。
+
+
 
 ## 第3章：学習プロセスと評価指標の理解
 
